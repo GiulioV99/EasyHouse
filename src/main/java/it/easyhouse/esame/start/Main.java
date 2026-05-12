@@ -1,0 +1,136 @@
+package it.easyhouse.esame.start;
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+import it.easyhouse.esame.controller.EasyHouse;
+import it.easyhouse.esame.model.Proprietario;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		EasyHouse eh = EasyHouse.getInstance();
+		int scelta;
+		System.out.println("Benvenuto in easyHouse !\n");
+		
+		Scanner sc = new Scanner(System.in);
+		
+		eh.loadProprietari();
+		
+		while (true) {
+	        System.out.println("\nScegli tra le operazioni disponibili.");
+	        System.out.println(
+	            "0 - Esci\n" +
+	            "1 - Registra nuova casa\n" +
+	            "2 - Aggiungi spazio comune\n" +
+	            "3 - Inserisci inquilino\n" +
+	            "4 - Login\n" +
+	            "5 - Logout\n"
+	        );
+	        
+	        try {
+	        	scelta = sc.nextInt();
+	            sc.nextLine();
+	        } catch (InputMismatchException e) {
+	        	System.out.println("Inserisci un valore corretto");
+	        	sc.nextLine();
+	        	continue;
+	        }
+	        
+	        switch(scelta) {
+	        case 0:
+	        	System.out.println("\nArrivederci !");
+	        	sc.close();
+	        	System.exit(0);
+	        	break;
+	        case 1:
+	        	registraCasa(eh, sc);
+	        	break;
+	        case 2:
+	        	aggiungiSpazioComune(eh, sc);
+	        	break;
+	        case 3:
+	        	aggiungiInquilino(eh, sc);
+	        	break;
+	        case 4:
+	        	loginProprietario(sc, eh);
+	        	break;
+	        case 5:
+	        	eh.setCurrentUser(null);
+                System.out.println("Logout effettuato.");
+	        }
+	        
+		 }
+		 	
+	}
+	
+	 private static void registraCasa(EasyHouse eh, Scanner sc) {
+		 String citta;
+		 String indirizzo;
+		 int postiLetto;
+		 
+		 if (!(eh.getCurrentUser()  instanceof Proprietario)) {
+	            System.out.println("Operazione riservata al proprietario.");
+	            return;
+		 }
+		 System.out.println("\nInserisci la città della casa:");
+		 citta = sc.nextLine();
+		 System.out.println("\nInserisci l'indirizzo della casa:");
+		 indirizzo = sc.nextLine();
+		 System.out.println("\nInserisci i posti letto della casa:");
+		 postiLetto = sc.nextInt();
+		 sc.nextLine();
+		 eh.registraNuovaCasa(indirizzo, citta, postiLetto, 'a', postiLetto);
+	}
+	
+	private static void aggiungiSpazioComune(EasyHouse eh, Scanner sc) {
+		String nome;
+		int tipo;
+		
+		if (!(eh.getCurrentUser()  instanceof Proprietario)) {
+            System.out.println("Operazione riservata al proprietario.");
+            return;
+	    }
+		System.out.println("\n inserisci nome spazio comune");
+		nome = sc.nextLine();
+		System.out.println("\n inserisci tipo spazio comune"
+				+ "1 -> precedenza a chi lo ha prenotato meno(indipendentementa dalla data prenotazione)"
+				+ "2 -> precedenza a chi prenota prima");
+		tipo = sc.nextInt();
+		sc.nextLine();
+		eh.aggiungiSpazioComune(nome, tipo);
+	}
+	
+	public static void aggiungiInquilino (EasyHouse eh, Scanner sc) {
+		
+		if (!(eh.getCurrentUser()  instanceof Proprietario)) {
+            System.out.println("Operazione riservata al proprietario.");
+            return;
+	    }
+		System.out.println("Inserisci nome del nuovo inqulino");
+		String nome = sc.nextLine();
+		System.out.println("Inserisci la cauzione");
+		double cauzione = sc.nextDouble();
+		System.out.println("Inserisci email del nuovo inqulino");
+		String email = sc.nextLine();
+		
+		eh.aggiungiInquilino(nome, email, cauzione);
+	}
+	
+	 private static void loginProprietario(Scanner sc, EasyHouse eh) {
+	        System.out.print("Email: ");
+	        String email = sc.nextLine();
+	        System.out.print("Password: ");
+	        String password = sc.nextLine();
+	 
+	        Proprietario p = eh.getProprietarioByEmail(email);
+	        if (p != null && p.getPassword().equals(password)) {
+	            eh.setCurrentUser(p);
+	            System.out.println("Login effettuato. Benvenuto, " + p.getNome() + "!");
+	        } else {
+	            System.out.println("Credenziali non valide.");
+	        }
+	    }
+
+}
