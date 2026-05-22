@@ -17,6 +17,8 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		
 		eh.loadProprietari();
+		eh.loadCase();
+//		eh.loadSpaziComuni();
 		
 		while (true) {
 	        System.out.println("\nScegli tra le operazioni disponibili.");

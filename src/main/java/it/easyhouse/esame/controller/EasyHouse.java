@@ -14,18 +14,18 @@ public class EasyHouse {
 	private Casa casaCorrente;
 	private CasaRepository casaRepo;
 	private Utente currentUser;
-	private Proprietario prop;
 	private ProprietarioRepository propRepo;
 
 	
-	private EasyHouse() {
-		this.casaRepo = new CasaRepository();
-	    this.propRepo = new ProprietarioRepository();
+	private EasyHouse(CasaRepository casaRepo, ProprietarioRepository propRepo) {
+		this.casaRepo = casaRepo;
+	    this.propRepo = propRepo;
+	    //completare il costruutore
 	}
 
 	public static EasyHouse getInstance() {
 		if (instance == null) {
-			instance = new EasyHouse();
+			instance = new EasyHouse(new CasaRepository(), new ProprietarioRepository());
 		}
 		return instance;
 	}
@@ -41,6 +41,7 @@ public class EasyHouse {
 	public Casa registraNuovaCasa(String indirizzo, String citta, int piano, char scala, int numeroPostiLetto) {
 		Casa c = new Casa(indirizzo, citta, piano, scala, numeroPostiLetto);
 		casaRepo.save(c);
+		setCasaCorrente(c);
 		return c;
 	}
 	
@@ -65,15 +66,7 @@ public class EasyHouse {
 	}
 	
 	public Proprietario getProprietarioByEmail(String email) {
-		prop = propRepo.getProprietarioByEmail(email);
-		if (prop.getEmail().equals(email)) {
-			return prop;
-		}
-		return null;
-	}
-
-	public ProprietarioRepository getPropRepo() {
-		return propRepo;
+	    return propRepo.getProprietarioByEmail(email);
 	}
 
 	public void setPropRepo(ProprietarioRepository propRepo) {
@@ -85,6 +78,14 @@ public class EasyHouse {
         Proprietario p1 = new Proprietario("Mario", "Rossi", "email", "password", 1);
         propRepo.save(p1);
     }
+	
+	public void loadCase() {
+        Casa c1 = new Casa("via Mineo", "Catania", 5, 'D', 1);
+        casaCorrente.addSpazioComune("Cinema", 1);
+        casaRepo.save(c1);
+        setCasaCorrente(c1);
+    }
+
 
 
 }
