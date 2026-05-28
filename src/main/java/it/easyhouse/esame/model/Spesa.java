@@ -1,6 +1,8 @@
 package it.easyhouse.esame.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import it.easyhouse.esame.catalog.StatoSpesa;
 
@@ -12,13 +14,16 @@ public abstract class Spesa {
 	private LocalDate dataScadenza;
 	private String nota;
 	private StatoSpesa stato;
+	private List<Pagamento> pagamenti;
+
 	
 	protected Spesa(String id, double importo, LocalDate dataScadenza, String nota) {
 	    this.id = id;
 	    this.importo = importo;
 	    this.dataScadenza = dataScadenza;
 	    this.nota = nota;
-	    this.stato = StatoSpesa.NON_PAGATA; // default
+	    this.stato = StatoSpesa.NON_PAGATA;
+	    this.pagamenti = new ArrayList<>();
 	}
 	
 	public String getId() { 
@@ -62,6 +67,14 @@ public abstract class Spesa {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	
+	public void addPagamento(Pagamento p) {
+	    this.pagamenti.add(p);
+	}
+	
+	public List<Pagamento> getPagamenti() {
+	    return pagamenti;
 	}
 
 	

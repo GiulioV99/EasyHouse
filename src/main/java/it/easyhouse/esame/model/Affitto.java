@@ -4,8 +4,11 @@ import java.time.LocalDate;
 
 public class Affitto extends Spesa{
 
-	public Affitto(String id, double importo, LocalDate dataScadenza, String nota) {
+	String nomeInquilino;
+	
+	public Affitto(String id, double importo, LocalDate dataScadenza, String nota, String nomeInquilino) {
         super(id, importo, dataScadenza, nota);
+        this.nomeInquilino = nomeInquilino;
     }
 
 	@Override

@@ -148,21 +148,26 @@ public class Main {
 	     String id = sc.nextLine();
 	     System.out.print("inserisci tipo di spesa: \n 1 - affitto \n 2 - bolletta");
 	     int codTipo = sc.nextInt();
+	     sc.nextLine();
+	     String nomeInquilino = null;
 	     String tipo = null;
 	     if (codTipo == 1) {
 	    	 tipo = "Affitto";
+	    	 System.out.println("Inserisci il nome dell'inquilino");
+	    	 nomeInquilino = sc.nextLine();
 	     } else if (codTipo == 2) {
 	    	 tipo = "Bolletta";
 	     }
 	     System.out.print("inserisci importo: ");
 	     double importo = sc.nextDouble();
+	     sc.nextLine();
 	     System.out.println("inserisci data scadenza formato aaaa-mm-gg: ");
 	     String scadenza = sc.nextLine();
 	     LocalDate dataScadenza = LocalDate.parse(scadenza);
 	     System.out.println("Inserisci note");
 	     String nota = sc.nextLine();
 	     
-	     eh.addSpesa(id, tipo, importo, dataScadenza, nota);
+	     eh.addSpesa(id, tipo, importo, dataScadenza, nota, nomeInquilino);
 	 }
 
 }

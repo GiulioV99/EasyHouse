@@ -3,6 +3,7 @@ package it.easyhouse.esame.model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import it.easyhouse.esame.factory.SpesaFactory;
 
@@ -107,9 +108,26 @@ public class Casa {
 		return false;
 	}
 	
-	public void addSpesa(String id, String tipo, double importo, LocalDate dataScadenza, String nota) {
-		Spesa s = SpesaFactory.crea(id, tipo, importo, dataScadenza, nota, inquilini.size());
+	public void addSpesa(String id, String tipo, double importo, LocalDate dataScadenza, String nota, String nomeInquilino) {
+		Spesa s = SpesaFactory.crea(id, tipo, importo, dataScadenza, nota, inquilini.size(), nomeInquilino);
 		spese.add(s);
+		
+		if(s instanceof Affitto) {
+			Inquilino i = getInquilinoByNome(nomeInquilino);
+			Pagamento p = new Pagamento (i, s, s.calcolaQuota(inquilini.size()));
+			s.addPagamento(p);
+		} else {
+			double quota = s.calcolaQuota(inquilini.size());
+			inquilini.stream()
+	         .forEach(i -> s.addPagamento(new Pagamento(i, s, quota)));
+		}
+	}
+	
+	public Inquilino getInquilinoByNome(String nome) {
+		return inquilini.stream()
+			.filter(i -> i.getNome().equals(nome))
+			.findFirst()
+	        .orElseThrow(() -> new NoSuchElementException("Inquilino non trovato: " + nome));
 	}
 
 }

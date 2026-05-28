@@ -84,9 +84,12 @@ public class EasyHouse {
         casaRepo.save(c1);
     }
 
-	public void addSpesa(String id, String tipo, double importo, LocalDate dataScadenza, String nota) {
+	public void addSpesa(String id, String tipo, double importo, LocalDate dataScadenza, String nota, String nomeInquilino) {
+		if (!(currentUser instanceof Proprietario)) {
+	        throw new IllegalStateException("Operazione riservata al proprietario.");
+	    }
 		Casa c = getCasaCorrente();
-		c.addSpesa(id, tipo, importo, dataScadenza, nota);
+		c.addSpesa(id, tipo, importo, dataScadenza, nota, nomeInquilino);
 	}
 
 
