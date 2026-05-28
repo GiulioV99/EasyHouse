@@ -1,5 +1,7 @@
 package it.easyhouse.esame.controller;
 
+import java.time.LocalDate;
+
 import it.easyhouse.esame.model.Casa;
 import it.easyhouse.esame.model.Proprietario;
 import it.easyhouse.esame.model.Utente;
@@ -46,15 +48,15 @@ public class EasyHouse {
 	}
 	
     public void aggiungiSpazioComune(String nomeSpazio, int tipo) {
-//        Casa c = casaRepo.getCasaByIndirizzo(casa);
         if (casaCorrente == null) {
             throw new IllegalArgumentException("Casa non trovata");
         }
         casaCorrente.addSpazioComune(nomeSpazio, tipo);
     }
     
-    public void aggiungiInquilino(String nome, String email, double cauzione) {
-    	
+    public void aggiungiInquilino(String nome, String cognome, String email, String password, double cauzione) {
+    	Casa c = getCasaCorrente();
+    	c.addInquilino(nome, cognome, email, password, cauzione);
     }
 
 	public Utente getCurrentUser() {
@@ -68,10 +70,6 @@ public class EasyHouse {
 	public Proprietario getProprietarioByEmail(String email) {
 	    return propRepo.getProprietarioByEmail(email);
 	}
-
-	public void setPropRepo(ProprietarioRepository propRepo) {
-		this.propRepo = propRepo;
-	}
 	
 	
 	public void loadProprietari() {
@@ -81,11 +79,15 @@ public class EasyHouse {
 	
 	public void loadCase() {
         Casa c1 = new Casa("via Mineo", "Catania", 5, 'D', 1);
+        setCasaCorrente(c1);
         casaCorrente.addSpazioComune("Cinema", 1);
         casaRepo.save(c1);
-        setCasaCorrente(c1);
     }
 
+	public void addSpesa(String id, String tipo, double importo, LocalDate dataScadenza, String nota) {
+		Casa c = getCasaCorrente();
+		c.addSpesa(id, tipo, importo, dataScadenza, nota);
+	}
 
 
 }

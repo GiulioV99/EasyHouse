@@ -1,7 +1,10 @@
 package it.easyhouse.esame.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import it.easyhouse.esame.factory.SpesaFactory;
 
 public class Casa {
 
@@ -11,7 +14,8 @@ public class Casa {
 	private char scala;
 	private int numeroPostiLetto;
 	private List<SpazioComune> spaziComune;
-	private List<Inquilino> inqulini;
+	private List<Inquilino> inquilini;
+	private List<Spesa> spese;
 	
 	public Casa(String indirizzo, String citta, int piano, char scala, int numeroPostiLetto) {
 		this.citta = citta;
@@ -19,9 +23,9 @@ public class Casa {
         this.piano = piano;
         this.scala = scala;
         this.numeroPostiLetto = numeroPostiLetto;
-        
         this.spaziComune = new ArrayList<>();
-        this.inqulini = new ArrayList<>();
+        this.inquilini = new ArrayList<>();
+        this.spese = new ArrayList<>();
 	}
 	
 	public String getIndirizzo() {
@@ -60,21 +64,52 @@ public class Casa {
 	public void setSpaziComune(List<SpazioComune> spaziComune) {
 		this.spaziComune = spaziComune;
 	}
+	public List<Inquilino> getInquilini() {
+		return inquilini;
+	}
+	public void setInquilini(List<Inquilino> inquilini) {
+		this.inquilini = inquilini;
+	}
+	
+	public List<Spesa> getSpese() {
+		return spese;
+	}
+
+	public void setSpese(List<Spesa> spese) {
+		this.spese = spese;
+	}
+	
 	
 	public void addSpazioComune(String nome, int tipo) {
+		boolean esiste = this.spaziComune.stream()
+				.anyMatch(s -> s.getNome().equals(nome));
+		if (esiste) {
+	        throw new IllegalArgumentException("Spazio comune già esistente: " + nome);
+		}
 		SpazioComune sc = new SpazioComune(nome, tipo);
 		this.spaziComune.add(sc);
 	}
 
-	//TODO : verificare se passare inquilino o i dati
-	public void addInquilino(Inquilino i) {
-		this.inqulini.add(i);
+	public void addInquilino(String nome, String cognome, String email, String password, double cauzione) {
+		boolean esiste = this.inquilini.stream()
+				.anyMatch(i -> i.getEmail().equals(email));
+		if(esiste) {
+			throw new IllegalArgumentException("mail già registrata" + email);
+		}
+		Inquilino i = new Inquilino (nome, cognome, email, password, cauzione);
+		this.inquilini.add(i);
 	}
 	
 	public boolean haPostiLetto() {
-		int numPosti = this.numeroPostiLetto - inqulini.size();
+		int numPosti = this.numeroPostiLetto - inquilini.size();
 		if(numPosti > 0)
 			return true;
 		return false;
 	}
+	
+	public void addSpesa(String id, String tipo, double importo, LocalDate dataScadenza, String nota) {
+		Spesa s = SpesaFactory.crea(id, tipo, importo, dataScadenza, nota, inquilini.size());
+		spese.add(s);
+	}
+
 }

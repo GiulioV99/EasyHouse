@@ -1,5 +1,7 @@
 package it.easyhouse.esame.start;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -28,6 +30,7 @@ public class Main {
 	            "2 - Aggiungi spazio comune\n" +
 	            "3 - Inserisci inquilino\n" +
 	            "4 - Login\n" +
+	            "5 - aggiungi spesa\n" +
 	            "5 - Logout\n"
 	        );
 	        
@@ -59,6 +62,9 @@ public class Main {
 	        	loginProprietario(sc, eh);
 	        	break;
 	        case 5:
+	        	aggiungiSpesa(sc, eh);
+	        	break;
+	        case 10:
 	        	eh.setCurrentUser(null);
                 System.out.println("Logout effettuato.");
 	        }
@@ -112,12 +118,14 @@ public class Main {
 	    }
 		System.out.println("Inserisci nome del nuovo inqulino");
 		String nome = sc.nextLine();
+		System.out.println("Inserisci cognome del nuovo inqulino");
+		String cognome = sc.nextLine();
 		System.out.println("Inserisci la cauzione");
 		double cauzione = sc.nextDouble();
 		System.out.println("Inserisci email del nuovo inqulino");
 		String email = sc.nextLine();
 		
-		eh.aggiungiInquilino(nome, email, cauzione);
+		eh.aggiungiInquilino(nome, cognome, email, "password", cauzione);
 	}
 	
 	 private static void loginProprietario(Scanner sc, EasyHouse eh) {
@@ -134,5 +142,27 @@ public class Main {
 	            System.out.println("Credenziali non valide.");
 	        }
 	    }
+	 
+	 private static void aggiungiSpesa(Scanner sc, EasyHouse eh) {
+		 System.out.print("inserisci id spesa");
+	     String id = sc.nextLine();
+	     System.out.print("inserisci tipo di spesa: \n 1 - affitto \n 2 - bolletta");
+	     int codTipo = sc.nextInt();
+	     String tipo = null;
+	     if (codTipo == 1) {
+	    	 tipo = "Affitto";
+	     } else if (codTipo == 2) {
+	    	 tipo = "Bolletta";
+	     }
+	     System.out.print("inserisci importo: ");
+	     double importo = sc.nextDouble();
+	     System.out.println("inserisci data scadenza formato aaaa-mm-gg: ");
+	     String scadenza = sc.nextLine();
+	     LocalDate dataScadenza = LocalDate.parse(scadenza);
+	     System.out.println("Inserisci note");
+	     String nota = sc.nextLine();
+	     
+	     eh.addSpesa(id, tipo, importo, dataScadenza, nota);
+	 }
 
 }
