@@ -15,6 +15,7 @@ public abstract class Spesa {
 	private String nota;
 	private StatoSpesa stato;
 	private List<Pagamento> pagamenti;
+	private int mora;
 
 	
 	protected Spesa(String id, double importo, LocalDate dataScadenza, String nota) {
@@ -77,8 +78,17 @@ public abstract class Spesa {
 	    return pagamenti;
 	}
 
-	public void aggiornaQuote(int numInquilini, Spesa s) {
-		Pagamento pagamento = pagamenti.stream()
-				.filter(p -> p.getSpesa().equals(s))
+	public void aggiornaQuote(Spesa s, int numInquilini) {
+		pagamenti.stream()
+				.filter(p -> p.getSpesa().getId().equals(s.getId()))
+				.forEach(p -> p.setQuota(s.importo/numInquilini));
+	}
+
+	public int getMora() {
+		return mora;
+	}
+
+	public void setMora(int mora) {
+		this.mora = mora;
 	}
 }

@@ -30,7 +30,9 @@ public class Main {
 	            "2 - Aggiungi spazio comune\n" +
 	            "3 - Inserisci inquilino\n" +
 	            "4 - Login\n" +
-	            "5 - aggiungi spesa\n" +
+	            "5 - Aggiungi spesa\n" +
+	            "6 - Modifica spesa\n" +
+	            "7 - Elimina Spesa" +
 	            "5 - Logout\n"
 	        );
 	        
@@ -66,6 +68,10 @@ public class Main {
 	        	break;
 	        case 6:
 	        	modificaSpesa(sc, eh);
+	        	break;
+	        case 7:
+	        	eliminaSpesa(sc, eh);
+	        	break;
 	        case 10:
 	        	eh.setCurrentUser(null);
                 System.out.println("Logout effettuato.");
@@ -183,6 +189,10 @@ public class Main {
 		 sc.nextLine();
 		 
 		 eh.modificaSpesa(id, importo, "note");
+	 }
+	 
+	 public static void eliminaSpesa(Scanner sc, EasyHouse eh) {
+		 
 	 }
 
 }

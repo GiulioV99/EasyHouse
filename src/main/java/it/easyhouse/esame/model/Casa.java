@@ -139,7 +139,7 @@ public class Casa {
 		
 		spesa.setImporto(importo);
 		spesa.setNota(note);
-		spesa.aggiornaQuote(inquilini.size());
+		spesa.aggiornaQuote(spesa, inquilini.size());
 	}
 
 }
