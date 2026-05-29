@@ -77,5 +77,8 @@ public abstract class Spesa {
 	    return pagamenti;
 	}
 
-	
+	public void aggiornaQuote(int numInquilini, Spesa s) {
+		Pagamento pagamento = pagamenti.stream()
+				.filter(p -> p.getSpesa().equals(s))
+	}
 }

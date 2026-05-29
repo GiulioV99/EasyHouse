@@ -64,6 +64,8 @@ public class Main {
 	        case 5:
 	        	aggiungiSpesa(sc, eh);
 	        	break;
+	        case 6:
+	        	modificaSpesa(sc, eh);
 	        case 10:
 	        	eh.setCurrentUser(null);
                 System.out.println("Logout effettuato.");
@@ -168,6 +170,19 @@ public class Main {
 	     String nota = sc.nextLine();
 	     
 	     eh.addSpesa(id, tipo, importo, dataScadenza, nota, nomeInquilino);
+	 }
+	 
+	 public static void modificaSpesa(Scanner sc, EasyHouse eh) {
+		 eh.getSpeseNonPagate().stream()
+		 	.forEach(s -> System.out.println(s));
+		 
+		 System.out.println("Inserisci id spesa da modificare: ");
+		 String id = sc.nextLine();
+		 System.out.println("Inserisci nuovo importo: ");
+		 double importo = sc.nextDouble();
+		 sc.nextLine();
+		 
+		 eh.modificaSpesa(id, importo, "note");
 	 }
 
 }

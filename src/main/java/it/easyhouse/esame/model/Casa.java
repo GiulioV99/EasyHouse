@@ -129,5 +129,17 @@ public class Casa {
 			.findFirst()
 	        .orElseThrow(() -> new NoSuchElementException("Inquilino non trovato: " + nome));
 	}
+	
+	
+	public void modificaSpesa (String id, double importo, String note) {
+		Spesa spesa = getSpese().stream()
+				.filter(s -> s.getId().equals(id))
+				.findFirst()
+	            .orElseThrow(() -> new IllegalArgumentException("Spesa con ID " + id + " non trovata"));
+		
+		spesa.setImporto(importo);
+		spesa.setNota(note);
+		spesa.aggiornaQuote(inquilini.size());
+	}
 
 }

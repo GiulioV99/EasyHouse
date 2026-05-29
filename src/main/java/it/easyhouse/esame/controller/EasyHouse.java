@@ -1,9 +1,14 @@
 package it.easyhouse.esame.controller;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import it.easyhouse.esame.catalog.StatoSpesa;
 import it.easyhouse.esame.model.Casa;
 import it.easyhouse.esame.model.Proprietario;
+import it.easyhouse.esame.model.Spesa;
 import it.easyhouse.esame.model.Utente;
 import it.easyhouse.esame.repository.CasaRepository;
 import it.easyhouse.esame.repository.ProprietarioRepository;
@@ -92,5 +97,17 @@ public class EasyHouse {
 		c.addSpesa(id, tipo, importo, dataScadenza, nota, nomeInquilino);
 	}
 
+	public List<Spesa> getSpeseNonPagate() {
+	    return getCasaCorrente().getSpese().stream()
+	    		.filter(s -> s.getStato().equals(StatoSpesa.NON_PAGATA))
+	    		.collect(Collectors.toList());
+	}
+	
+	public void modificaSpesa(String id, double importo, String note) {
+	    if (!(currentUser instanceof Proprietario)) {
+	        throw new IllegalStateException("Operazione riservata al proprietario.");
+	    }
+	    getCasaCorrente().modificaSpesa(id, importo, note);
+	}
 
 }
